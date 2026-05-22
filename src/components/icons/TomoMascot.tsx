@@ -1,0 +1,72 @@
+/**
+ * TOMO マスコット (黒×茶ロングダックスフント)
+ * 設計書 §3.4 — トモラボ代表トモさんのAIアバター
+ *
+ * ChatGPT生成の水彩イラスト（背景付き）をそのまま使用。
+ *
+ * variant:
+ *   - "face"    : 顔のみ (アバター・吹き出し横用) — 320x320
+ *   - "hero"    : 全身+ペン (Welcome ヒーロー用) — 500x553
+ *   - "writing" : 全身+ペン (装飾用) — 500x553
+ *
+ * mood: CSS filter / transform で表情の代用 (default/thinking/happy/sad)
+ */
+import { cn } from "@/lib/utils";
+
+type Variant = "face" | "hero" | "writing";
+type Mood = "default" | "thinking" | "happy" | "sad";
+
+// URLバージョン: 新しい画像に置換した時に必ず更新してキャッシュバイパス
+const V = "?v=20260522g-screenshot-sq";
+const VARIANT_SOURCES = {
+  face: { src: `/mascots/tomo-avatar.png${V}`, width: 320, height: 320 },
+  hero: { src: `/mascots/tomo-hero.png${V}`, width: 500, height: 659 },
+  writing: { src: `/mascots/tomo-hero.png${V}`, width: 500, height: 659 },
+} as const;
+
+const MOOD_CLASSES: Record<Mood, string> = {
+  default: "",
+  thinking: "saturate-90",
+  happy: "saturate-110",
+  sad: "saturate-50 brightness-95 -rotate-3",
+};
+
+type Props = {
+  variant?: Variant;
+  mood?: Mood;
+  className?: string;
+  priority?: boolean;
+  /** 円形アバター用に face をコンテナいっぱいに表示する */
+  fillCircle?: boolean;
+};
+
+export function TomoMascot({
+  variant = "face",
+  mood = "default",
+  className,
+  priority = false,
+  fillCircle = false,
+}: Props) {
+  const src = VARIANT_SOURCES[variant];
+
+  // priority は next/image 用なので素の <img> では無視
+  void priority;
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={src.src}
+      alt="TOMO (トモのAIアバター)"
+      width={src.width}
+      height={src.height}
+      draggable={false}
+      className={cn(
+        "select-none transition-all",
+        MOOD_CLASSES[mood],
+        // 正方形+余白付き画像なので object-contain で枠内に全部収める (はみ出さない)
+        fillCircle && "h-full w-full object-contain",
+        className,
+      )}
+    />
+  );
+}

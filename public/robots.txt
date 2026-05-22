@@ -1,0 +1,4 @@
+# tomouni-chat — 検索エンジンインデックス禁止
+# Phase 0: 全ページをクロール対象外にする
+User-agent: *
+Disallow: /

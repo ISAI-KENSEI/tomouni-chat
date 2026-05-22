@@ -1,0 +1,279 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   トモユニチャット カラーパレット
+   設計書 §3.2 (BRAND.md と独立した子ブランド)
+   - クラフト紙ベース × 手書きカラフル4色アクセント
+   - PiyoAILab 付箋4色を Suggestions に流用
+   ============================================================ */
+
+@theme inline {
+  /* shadcn 互換 (AI Elements が参照) */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-noto-jp), var(--font-zen-maru), system-ui, sans-serif;
+  --font-mono: var(--font-quicksand), ui-monospace, monospace;
+  --font-heading: var(--font-zen-maru), var(--font-noto-jp), sans-serif;
+  --font-display: var(--font-mochiy), var(--font-zen-maru), sans-serif;
+  --font-handwritten: var(--font-yusei), var(--font-zen-maru), sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* --- クラフト紙パレット (Tailwind util として生成される) --- */
+  --color-craft-50:  #FBF5E6;
+  --color-craft-100: #F5EAD0;
+  --color-craft-200: #EBDAB2;
+  --color-craft-300: #DDC691;
+  --color-craft-400: #C9AC74;
+  --color-wood-500:  #A8784A;
+  --color-wood-600:  #82592F;
+  --color-wood-700:  #6B4A2B;
+
+  /* --- 手書きカラフル4色 (アクセント・見出し色分け) --- */
+  --color-tomato-500:  #D8482E;
+  --color-tomato-600:  #B23A24;
+  --color-sky-500:     #2F6FCF;
+  --color-sky-600:     #2456A8;
+  --color-leaf-500:    #4A9C5C;
+  --color-leaf-600:    #3A7D49;
+  --color-mustard-500: #E8A622;
+  --color-mustard-600: #C28A1C;
+
+  /* --- 付箋4色 (PiyoAILab 流用) --- */
+  --color-sticky-orange:        #FFE6D2;
+  --color-sticky-orange-border: #F57C2D;
+  --color-sticky-yellow:        #FFF8E1;
+  --color-sticky-yellow-border: #F2C94C;
+  --color-sticky-teal:          #EDF6F4;
+  --color-sticky-teal-border:   #5BA89D;
+  --color-sticky-pink:          #FDF2F5;
+  --color-sticky-pink-border:   #E07B8B;
+
+  /* --- インクカラー (純黒避けて温かみ) --- */
+  --color-ink-900: #2D1E10;
+  --color-ink-700: #5A4226;
+  --color-ink-500: #8A6B45;
+}
+
+:root {
+  /* shadcn ベース変数 (クラフト紙トーンで上書き) */
+  --background: oklch(0.95 0.04 80);        /* クラフト紙ベース #F5EAD0 相当 */
+  --foreground: oklch(0.25 0.04 50);        /* 濃茶 #2D1E10 相当 */
+  --card: oklch(0.97 0.03 85);              /* クリーム白 #FBF5E6 */
+  --card-foreground: oklch(0.25 0.04 50);
+  --popover: oklch(0.97 0.03 85);
+  --popover-foreground: oklch(0.25 0.04 50);
+  --primary: oklch(0.55 0.09 55);           /* 木札茶 #A8784A */
+  --primary-foreground: oklch(0.97 0.03 85);
+  --secondary: oklch(0.88 0.06 80);         /* 付箋黄っぽい */
+  --secondary-foreground: oklch(0.25 0.04 50);
+  --muted: oklch(0.91 0.04 80);
+  --muted-foreground: oklch(0.45 0.05 55);
+  --accent: oklch(0.78 0.14 65);            /* マスタード */
+  --accent-foreground: oklch(0.25 0.04 50);
+  --destructive: oklch(0.58 0.18 30);       /* トマト #D8482E */
+  --border: oklch(0.78 0.06 75);            /* クラフト境界 */
+  --input: oklch(0.93 0.04 80);
+  --ring: oklch(0.68 0.13 65);              /* マスタード focus ring */
+  --chart-1: oklch(0.58 0.18 30);
+  --chart-2: oklch(0.52 0.15 250);
+  --chart-3: oklch(0.62 0.13 140);
+  --chart-4: oklch(0.78 0.14 65);
+  --chart-5: oklch(0.55 0.09 55);
+  --radius: 1rem;
+  --sidebar: oklch(0.95 0.04 80);
+  --sidebar-foreground: oklch(0.25 0.04 50);
+  --sidebar-primary: oklch(0.55 0.09 55);
+  --sidebar-primary-foreground: oklch(0.97 0.03 85);
+  --sidebar-accent: oklch(0.88 0.06 80);
+  --sidebar-accent-foreground: oklch(0.25 0.04 50);
+  --sidebar-border: oklch(0.78 0.06 75);
+  --sidebar-ring: oklch(0.68 0.13 65);
+}
+
+@layer base {
+  * { @apply border-border outline-ring/40; }
+  html { @apply font-sans antialiased; -webkit-text-size-adjust: 100%; }
+  body {
+    @apply text-ink-900;
+    /* サムネの「カフェ机」感に寄せる:
+       木目テクスチャを主役にして、ごく薄いクリームオーバーレイで温かみを足す。
+       チャット部分 (吹き出し・付箋等) は各コンポーネントが背景を持つので可読性OK。
+    */
+    background-color: #B58454;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.18  0 0 0 0 0.12  0 0 0 0 0.06  0 0 0 0.35 0'/></filter><rect width='180' height='180' filter='url(%23n)' opacity='0.06'/></svg>"),
+      radial-gradient(ellipse at top, rgba(255, 240, 210, 0.28), transparent 65%),
+      url('/textures/wood-desk.webp');
+    background-size: 180px 180px, cover, cover;
+    background-position: 0 0, center top, center;
+    background-repeat: repeat, no-repeat, no-repeat;
+    background-attachment: fixed, fixed, fixed;
+    background-blend-mode: normal, normal, normal;
+    min-height: 100dvh;
+    overscroll-behavior-y: contain;
+  }
+  ::selection { background: var(--color-mustard-500); color: white; }
+
+  /* スクロールバー (クラフト紙トーン) */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--color-craft-300); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-craft-400); }
+}
+
+/* ============================================================
+   カスタムアニメーション
+   ============================================================ */
+@keyframes pom-bounce {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50%      { transform: translateY(-4px) rotate(2deg); }
+}
+@keyframes paw-dance {
+  0%, 100% { opacity: 0.4; transform: translateY(0) scale(1); }
+  50%      { opacity: 1;   transform: translateY(-3px) scale(1.1); }
+}
+@keyframes sticky-sway {
+  0%, 100% { transform: rotate(var(--tilt, -1deg)); }
+  50%      { transform: rotate(calc(var(--tilt, -1deg) * -1)); }
+}
+@keyframes paper-flip {
+  from { opacity: 0; transform: translateY(8px) rotateX(8deg); }
+  to   { opacity: 1; transform: translateY(0) rotateX(0); }
+}
+
+/* TOMO ヒーロー用: ふわふわ呼吸 + たまに首を傾げる (6秒周期) */
+@keyframes tomo-idle {
+  0%   { transform: translateY(0)    rotate(0deg); }
+  20%  { transform: translateY(-5px) rotate(-1.5deg); }
+  40%  { transform: translateY(-2px) rotate(0deg); }
+  55%  { transform: translateY(-7px) rotate(2deg); }
+  70%  { transform: translateY(-3px) rotate(1deg); }
+  85%  { transform: translateY(-6px) rotate(-1deg); }
+  100% { transform: translateY(0)    rotate(0deg); }
+}
+
+/* TOMO ヒーロー用: 時々ぴょこっと跳ねる (12秒周期、tomo-idle の上に重ねる) */
+@keyframes tomo-blink-bounce {
+  0%, 90%, 100% { transform: scale(1); }
+  92%           { transform: scale(0.96, 1.04); }
+  95%           { transform: scale(1.04, 0.96); }
+  97%           { transform: scale(1); }
+}
+
+.animate-pom-bounce  { animation: pom-bounce 1.2s ease-in-out infinite; }
+.animate-paw-dance   { animation: paw-dance 0.8s ease-in-out infinite; }
+.animate-sticky-sway { animation: sticky-sway 4s ease-in-out infinite; }
+.animate-paper-flip  { animation: paper-flip 0.4s ease-out both; }
+.animate-tomo-idle   { animation: tomo-idle 6s ease-in-out infinite, tomo-blink-bounce 12s ease-in-out infinite; transform-origin: center bottom; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pom-bounce, .animate-paw-dance, .animate-sticky-sway, .animate-paper-flip, .animate-tomo-idle {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   ユーティリティ: 木札 (header背景)
+   ============================================================ */
+.wood-plate {
+  background:
+    linear-gradient(180deg, var(--color-wood-500), var(--color-wood-600));
+  border: 2px solid var(--color-wood-700);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.15),
+    0 4px 12px rgba(107, 74, 43, 0.25);
+}
+.wood-plate::before {
+  /* 木目テクスチャ */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='40'><filter id='w'><feTurbulence type='turbulence' baseFrequency='0.02 0.6' numOctaves='2'/><feColorMatrix values='0 0 0 0 0.3  0 0 0 0 0.2  0 0 0 0 0.1  0 0 0 0.4 0'/></filter><rect width='200' height='40' filter='url(%23w)' opacity='0.5'/></svg>");
+  background-size: 200px 40px;
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* ============================================================
+   ユーティリティ: 破線吹き出し (Bot bubble)
+   ============================================================ */
+.bot-bubble {
+  background: var(--color-craft-50);
+  border: 2px dashed var(--color-wood-500);
+  border-radius: 22px;
+  box-shadow: 0 2px 8px rgba(107, 74, 43, 0.08);
+  position: relative;
+}
+
+/* ============================================================
+   ユーティリティ: 付箋カード
+   ============================================================ */
+.sticky-note {
+  border: 1.5px solid var(--border-color, var(--color-craft-300));
+  background: var(--bg-color, var(--color-sticky-yellow));
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.06),
+    0 6px 14px rgba(107, 74, 43, 0.12);
+  transform: rotate(var(--tilt, -1deg));
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  font-family: var(--font-handwritten);
+}
+.sticky-note:hover {
+  transform: rotate(0deg) translateY(-2px);
+  box-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.06),
+    0 10px 20px rgba(107, 74, 43, 0.18);
+}
+.sticky-note:active {
+  transform: rotate(var(--tilt, -1deg)) translateY(1px);
+}
+
+/* AI Elements default の background を奪う (Conversation の white-bg を無効化) */
+[data-slot="conversation"] { background: transparent !important; }
+[data-slot="conversation-content"] { background: transparent !important; }
