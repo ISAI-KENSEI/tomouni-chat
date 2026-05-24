@@ -33,8 +33,15 @@ export async function verifyInviteCode(code: string): Promise<InviteCodeResult> 
 
   const admin = createAdminClient();
   if (!admin) {
-    console.error("[invite-code] Supabase admin client unavailable");
-    return { valid: false, error: "サーバーエラーが発生しました" };
+    const diagUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const diagKey = process.env.SUPABASE_SECRET_KEY;
+    console.error("[invite-code] Supabase admin client unavailable", {
+      urlSet: !!diagUrl,
+      urlLen: diagUrl?.length ?? 0,
+      keySet: !!diagKey,
+      keyLen: diagKey?.length ?? 0,
+    });
+    return { valid: false, error: `サーバーエラー(admin=null, url=${!!diagUrl}, key=${!!diagKey})` };
   }
 
   try {
