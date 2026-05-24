@@ -38,10 +38,11 @@ export async function verifyInviteCode(code: string): Promise<InviteCodeResult> 
   }
 
   try {
-    // Step 1: コードの存在・有効性チェック（max_uses 含む）
+    // Step 1: コードの存在・有効性チェック
+    // NOTE: max_uses / used_count は migration 004 適用後に有効化する
     const { data, error } = await admin
       .from("invite_codes")
-      .select("id, code, expires_at, max_uses, used_count")
+      .select("id, code, expires_at")
       .eq("code", trimmed)
       .eq("is_active", true)
       .gt("expires_at", new Date().toISOString())
@@ -56,29 +57,17 @@ export async function verifyInviteCode(code: string): Promise<InviteCodeResult> 
       return { valid: false, error: "招待コードが無効です。コードを確認してください。" };
     }
 
-    // Step 2: 回数制限チェック
-    if (data.max_uses !== null && data.used_count >= data.max_uses) {
-      console.warn(`[invite-code] code=${trimmed} exhausted: ${data.used_count}/${data.max_uses}`);
-      return { valid: false, error: "この招待コードの利用上限に達しました。新しいコードを確認してください。" };
-    }
+    // Step 2: 回数制限チェック（migration 004 適用後に有効化）
+    // max_uses / used_count カラムが存在しない場合はスキップ
+    // if (data.max_uses !== null && data.used_count >= data.max_uses) {
+    //   return { valid: false, error: "この招待コードの利用上限に達しました。" };
+    // }
 
-    // Step 3: 排他ロック付きインクリメント（RPC）
-    const { data: incremented, error: rpcError } = await admin
-      .rpc("increment_invite_code_usage", { p_code: trimmed });
-
-    if (rpcError) {
-      console.error("[invite-code] RPC error:", rpcError);
-      // RPCが失敗してもコード自体は有効 → 認証は通す（可用性優先）
-      // ただしログで追跡可能にする
-      console.warn("[invite-code] used_count increment failed, allowing access anyway");
-      return { valid: true };
-    }
-
-    if (incremented === false) {
-      // レースコンディションで他のリクエストが先にmax_usesに達した
-      console.warn(`[invite-code] code=${trimmed} race condition: increment returned false`);
-      return { valid: false, error: "この招待コードの利用上限に達しました。新しいコードを確認してください。" };
-    }
+    // Step 3: 排他ロック付きインクリメント（migration 004 適用後に有効化）
+    // RPC `increment_invite_code_usage` は migration 004 で作成
+    // const { data: incremented, error: rpcError } = await admin
+    //   .rpc("increment_invite_code_usage", { p_code: trimmed });
+    // if (rpcError) { ... }
 
     return { valid: true };
   } catch (e) {
