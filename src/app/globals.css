@@ -180,30 +180,27 @@
   to   { opacity: 1; transform: translateY(0) rotateX(0); }
 }
 
-/* TOMO ヒーロー用: ふわふわ呼吸 + たまに首を傾げる (6秒周期) */
+/* TOMO ヒーロー用: 常に動いてる感のあるふわふわ + 首ふり (初動を消すため0%も動いてる途中) */
 @keyframes tomo-idle {
-  0%   { transform: translateY(0)    rotate(0deg); }
-  20%  { transform: translateY(-5px) rotate(-1.5deg); }
-  40%  { transform: translateY(-2px) rotate(0deg); }
-  55%  { transform: translateY(-7px) rotate(2deg); }
-  70%  { transform: translateY(-3px) rotate(1deg); }
-  85%  { transform: translateY(-6px) rotate(-1deg); }
-  100% { transform: translateY(0)    rotate(0deg); }
+  0%, 100% { transform: translateY(-4px) rotate(-1.5deg); }
+  25%      { transform: translateY(-10px) rotate(2.5deg); }
+  50%      { transform: translateY(-2px) rotate(-2.5deg); }
+  75%      { transform: translateY(-11px) rotate(3deg); }
 }
 
-/* TOMO ヒーロー用: 頻繁にぴょこぴょこ跳ねる (tomo-idle の上に重ねる) */
+/* TOMO ヒーロー用: ぴょこぴょこ跳ねる (休止区間ゼロ・常時アクション) */
 @keyframes tomo-blink-bounce {
-  0%, 50%, 100% { transform: scale(1); }
-  60%           { transform: scale(0.94, 1.06); }
-  75%           { transform: scale(1.06, 0.94); }
-  88%           { transform: scale(1); }
+  0%, 100% { transform: scale(1.02, 0.98); }
+  25%      { transform: scale(0.90, 1.10); }
+  50%      { transform: scale(1.10, 0.90); }
+  75%      { transform: scale(0.96, 1.04); }
 }
 
 .animate-pom-bounce  { animation: pom-bounce 1.2s ease-in-out infinite; }
 .animate-paw-dance   { animation: paw-dance 0.8s ease-in-out infinite; }
 .animate-sticky-sway { animation: sticky-sway 4s ease-in-out infinite; }
 .animate-paper-flip  { animation: paper-flip 0.4s ease-out both; }
-.animate-tomo-idle   { animation: tomo-idle 3s ease-in-out infinite, tomo-blink-bounce 2.5s ease-in-out infinite; transform-origin: center bottom; }
+.animate-tomo-idle   { animation: tomo-idle 2s ease-in-out infinite, tomo-blink-bounce 1.4s ease-in-out infinite; animation-delay: -0.5s, -0.3s; transform-origin: center bottom; }
 
 @media (prefers-reduced-motion: reduce) {
   .animate-pom-bounce, .animate-paw-dance, .animate-sticky-sway, .animate-paper-flip, .animate-tomo-idle {
