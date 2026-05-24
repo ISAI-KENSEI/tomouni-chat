@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
 const securityHeaders = [
   { key: "X-Frame-Options", value: "DENY" },
@@ -36,4 +37,11 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Sentry統合（NEXT_PUBLIC_SENTRY_DSN 未設定時は自動的に無効化）
+export default withSentryConfig(nextConfig, {
+  // ソースマップを本番でのみアップロード
+  silent: true,
+  // Vercel Cron Monitors を使わない
+  disableLogger: true,
+});
+

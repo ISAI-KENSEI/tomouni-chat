@@ -31,6 +31,9 @@ jobs:
       run: pnpm lint
       continue-on-error: true
 
+    - name: Test
+      run: pnpm test:ci
+
     - name: Build
       run: pnpm build
       env:
