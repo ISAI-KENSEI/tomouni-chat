@@ -74,9 +74,11 @@ function shouldSkip(pathname: string): boolean {
     pathname === "/robots.txt" ||
     pathname.startsWith("/mascots/") ||
     pathname.startsWith("/decor/") ||
-    pathname.startsWith("/textures/")
+    pathname.startsWith("/textures/") ||
+    pathname.startsWith("/security")
   );
 }
+
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;

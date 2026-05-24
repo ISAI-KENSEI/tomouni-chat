@@ -2,7 +2,15 @@
  * 招待コード照合
  * invite_codes テーブルから有効なコードを検索
  *
- * 照合条件: code一致 + is_active=true + expires_at > now()
+ * 照合条件: code一致 + is_active=true + expires_at > now() + used_count < max_uses
+ *
+ * 回数チェック:
+ *   - max_uses が NULL → 無制限（後方互換）
+ *   - max_uses が数値 → used_count < max_uses の場合のみ有効
+ *
+ * インクリメント:
+ *   RPC `increment_invite_code_usage` で排他ロック付きインクリメント
+ *   （同時リクエストで max_uses を超えないようにする）
  */
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -30,9 +38,10 @@ export async function verifyInviteCode(code: string): Promise<InviteCodeResult> 
   }
 
   try {
+    // Step 1: コードの存在・有効性チェック（max_uses 含む）
     const { data, error } = await admin
       .from("invite_codes")
-      .select("id, code, expires_at")
+      .select("id, code, expires_at, max_uses, used_count")
       .eq("code", trimmed)
       .eq("is_active", true)
       .gt("expires_at", new Date().toISOString())
@@ -45,6 +54,30 @@ export async function verifyInviteCode(code: string): Promise<InviteCodeResult> 
 
     if (!data) {
       return { valid: false, error: "招待コードが無効です。コードを確認してください。" };
+    }
+
+    // Step 2: 回数制限チェック
+    if (data.max_uses !== null && data.used_count >= data.max_uses) {
+      console.warn(`[invite-code] code=${trimmed} exhausted: ${data.used_count}/${data.max_uses}`);
+      return { valid: false, error: "この招待コードの利用上限に達しました。新しいコードを確認してください。" };
+    }
+
+    // Step 3: 排他ロック付きインクリメント（RPC）
+    const { data: incremented, error: rpcError } = await admin
+      .rpc("increment_invite_code_usage", { p_code: trimmed });
+
+    if (rpcError) {
+      console.error("[invite-code] RPC error:", rpcError);
+      // RPCが失敗してもコード自体は有効 → 認証は通す（可用性優先）
+      // ただしログで追跡可能にする
+      console.warn("[invite-code] used_count increment failed, allowing access anyway");
+      return { valid: true };
+    }
+
+    if (incremented === false) {
+      // レースコンディションで他のリクエストが先にmax_usesに達した
+      console.warn(`[invite-code] code=${trimmed} race condition: increment returned false`);
+      return { valid: false, error: "この招待コードの利用上限に達しました。新しいコードを確認してください。" };
     }
 
     return { valid: true };
