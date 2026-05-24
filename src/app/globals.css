@@ -191,19 +191,19 @@
   100% { transform: translateY(0)    rotate(0deg); }
 }
 
-/* TOMO ヒーロー用: 時々ぴょこっと跳ねる (12秒周期、tomo-idle の上に重ねる) */
+/* TOMO ヒーロー用: 頻繁にぴょこぴょこ跳ねる (tomo-idle の上に重ねる) */
 @keyframes tomo-blink-bounce {
-  0%, 90%, 100% { transform: scale(1); }
-  92%           { transform: scale(0.96, 1.04); }
-  95%           { transform: scale(1.04, 0.96); }
-  97%           { transform: scale(1); }
+  0%, 50%, 100% { transform: scale(1); }
+  60%           { transform: scale(0.94, 1.06); }
+  75%           { transform: scale(1.06, 0.94); }
+  88%           { transform: scale(1); }
 }
 
 .animate-pom-bounce  { animation: pom-bounce 1.2s ease-in-out infinite; }
 .animate-paw-dance   { animation: paw-dance 0.8s ease-in-out infinite; }
 .animate-sticky-sway { animation: sticky-sway 4s ease-in-out infinite; }
 .animate-paper-flip  { animation: paper-flip 0.4s ease-out both; }
-.animate-tomo-idle   { animation: tomo-idle 6s ease-in-out infinite, tomo-blink-bounce 12s ease-in-out infinite; transform-origin: center bottom; }
+.animate-tomo-idle   { animation: tomo-idle 3s ease-in-out infinite, tomo-blink-bounce 2.5s ease-in-out infinite; transform-origin: center bottom; }
 
 @media (prefers-reduced-motion: reduce) {
   .animate-pom-bounce, .animate-paw-dance, .animate-sticky-sway, .animate-paper-flip, .animate-tomo-idle {
