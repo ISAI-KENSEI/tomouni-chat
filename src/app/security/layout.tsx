@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "セキュリティ設計書 | TOMOチャット",
+  title: "セキュリティ設計書 | トモユニチャット",
   description: "トモユニチャットの多層防御アーキテクチャ",
 };
 

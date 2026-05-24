@@ -59,7 +59,7 @@ export default function LoginPage() {
             className="mt-2 text-xl font-bold text-[#5C3D2E]"
             style={{ fontFamily: "var(--font-zen-maru)" }}
           >
-            TOMOチャット
+            トモユニチャット
           </h1>
           <p className="mt-1 text-sm text-[#8B6914]/70">
             トモユニ メンバー専用

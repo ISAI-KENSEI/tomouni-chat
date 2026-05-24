@@ -49,14 +49,14 @@ const yuseiMagic = Yusei_Magic({
 });
 
 export const metadata: Metadata = {
-  title: "TOMOチャット | トモユニ",
+  title: "トモユニチャット",
   description:
     "大学生のAI学習ナビゲーター「TOMO」。トモのAI分身が24時間、AI活用・レポート・プロンプトのコツに答えます。",
-  applicationName: "TOMOチャット",
+  applicationName: "トモユニチャット",
   authors: [{ name: "B-Steep Inc." }],
   keywords: ["AI", "大学生", "トモユニ", "トモラボ", "ChatGPT", "Claude", "Gemini", "学習"],
   openGraph: {
-    title: "TOMOチャット | トモユニ",
+    title: "トモユニチャット",
     description: "大学生のAI学習ナビゲーター。トモのAI分身が24時間相談に乗ります。",
     type: "website",
   },
