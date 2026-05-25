@@ -60,13 +60,13 @@ export function MessageList({
       )}
       aria-label="会話履歴"
     >
-      <div className="mx-auto max-w-2xl px-4 py-3">
+      <div className="mx-auto max-w-2xl px-4 py-6">
         {/* ウェルカム + サジェスト */}
         {showWelcome && (
           <>
-            <div className="animate-paper-flip mx-auto mb-3 flex flex-col items-center text-center">
-              {/* ヒーロー: tomo-hero.png (胸+ペン) をコンパクトに表示 + 横に青マグ */}
-              <div className="relative mb-2 w-32 sm:w-40">
+            <div className="animate-paper-flip mx-auto mb-6 flex flex-col items-center text-center">
+              {/* ヒーロー: tomo-hero.png (胸+ペン) を大きく表示 + 横に青マグ */}
+              <div className="relative mb-3 w-44 sm:w-52">
                 <div className="animate-tomo-idle">
                   <TomoMascot variant="hero" mood="happy" priority />
                 </div>
@@ -86,19 +86,19 @@ export function MessageList({
               {/* テキスト部分は紙風カードで囲んで読みやすさ確保 */}
               <div
                 className={cn(
-                  "rounded-[20px] px-5 py-3 shadow-md",
+                  "rounded-[20px] px-6 py-4 shadow-md",
                   "bg-craft-50/90 backdrop-blur-sm",
                   "border-2 border-dashed border-craft-300",
                 )}
               >
                 <h1
-                  className="mb-1 text-xl text-wood-700 sm:text-2xl"
+                  className="mb-2 text-2xl text-wood-700"
                   style={{ fontFamily: "var(--font-mochiy)" }}
                 >
                   こんにちは <PawIcon size={20} className="inline -translate-y-0.5 text-mustard-500" />
                 </h1>
                 <p
-                  className="max-w-[20rem] text-[14px] leading-[1.7] text-ink-700 sm:text-[15px]"
+                  className="max-w-[20rem] text-[15px] leading-[1.8] text-ink-700"
                   style={{ fontFamily: "var(--font-zen-maru)" }}
                 >
                   大学生のAI活用、いっしょに考えよっか。
