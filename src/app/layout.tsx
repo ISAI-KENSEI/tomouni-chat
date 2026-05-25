@@ -21,19 +21,19 @@ import "./globals.css";
 const mochiyPop = Mochiy_Pop_One({
   variable: "--font-mochiy",
   weight: "400",
-  subsets: ["latin"],
+  preload: false,
   display: "swap",
 });
 const zenMaru = Zen_Maru_Gothic({
   variable: "--font-zen-maru",
   weight: ["500", "700", "900"],
-  subsets: ["latin"],
+  preload: false,
   display: "swap",
 });
 const notoSansJp = Noto_Sans_JP({
   variable: "--font-noto-jp",
   weight: ["400", "500", "700"],
-  subsets: ["latin"],
+  preload: false,
   display: "swap",
 });
 const quicksand = Quicksand({
@@ -45,7 +45,7 @@ const quicksand = Quicksand({
 const yuseiMagic = Yusei_Magic({
   variable: "--font-yusei",
   weight: "400",
-  subsets: ["latin"],
+  preload: false,
   display: "swap",
 });
 

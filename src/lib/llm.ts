@@ -1,16 +1,17 @@
 /**
  * LLM provider 切替
  * dev (LLM_PROVIDER=ollama) → ローカルOllama
- * prod (LLM_PROVIDER=gateway) → Vercel AI Gateway 経由 Gemini 2.0 Flash
+ * prod (LLM_PROVIDER=google) → 直接 Google Gemini 2.0 Flash (AI Gateway バイパス)
  *
  * 設計書 §11.2 参照
  */
 import { createOllama } from "ollama-ai-provider-v2";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { gateway } from "@ai-sdk/gateway";
 import type { LanguageModel } from "ai";
 
 export function getModel(): LanguageModel {
-  const provider = process.env.LLM_PROVIDER ?? "ollama";
+  const provider = process.env.LLM_PROVIDER ?? "google";
 
   if (provider === "ollama") {
     const ollama = createOllama({
@@ -19,14 +20,36 @@ export function getModel(): LanguageModel {
     return ollama(process.env.OLLAMA_MODEL ?? "qwen2.5:7b");
   }
 
-  // production: AI Gateway 経由 (provider failover & 統合請求)
-  return gateway(process.env.GATEWAY_MODEL ?? "google/gemini-2.0-flash");
+  if (provider === "google") {
+    const google = createGoogleGenerativeAI({
+      apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+    });
+    return google(process.env.GOOGLE_MODEL ?? "gemini-2.0-flash");
+  }
+
+  // production (gateway): Vercel AI Gateway 経由
+  if (provider === "gateway") {
+    // クレジットカード未登録による Vercel AI Gateway エラーを回避するため直接 Gemini にバイパス接続
+    const google = createGoogleGenerativeAI({
+      apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+    });
+    return google(process.env.GOOGLE_MODEL ?? "gemini-2.0-flash");
+  }
+
+  // デフォルトで直接 Gemini に接続
+  const google = createGoogleGenerativeAI({
+    apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+  });
+  return google(process.env.GOOGLE_MODEL ?? "gemini-2.0-flash");
 }
 
 export function getModelLabel(): string {
-  const provider = process.env.LLM_PROVIDER ?? "ollama";
+  const provider = process.env.LLM_PROVIDER ?? "google";
   if (provider === "ollama") {
     return `ollama/${process.env.OLLAMA_MODEL ?? "qwen2.5:7b"}`;
+  }
+  if (provider === "google") {
+    return `google/${process.env.GOOGLE_MODEL ?? "gemini-2.0-flash"}`;
   }
   return process.env.GATEWAY_MODEL ?? "google/gemini-2.0-flash";
 }

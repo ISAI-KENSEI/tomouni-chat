@@ -180,27 +180,17 @@
   to   { opacity: 1; transform: translateY(0) rotateX(0); }
 }
 
-/* TOMO ヒーロー用: 常に動いてる感のあるふわふわ + 首ふり (初動を消すため0%も動いてる途中) */
+/* TOMO ヒーロー用: 常に動いてる感のあるふわふわ + 首ふり (ゆっくりとした浮遊感) */
 @keyframes tomo-idle {
-  0%, 100% { transform: translateY(-4px) rotate(-1.5deg); }
-  25%      { transform: translateY(-10px) rotate(2.5deg); }
-  50%      { transform: translateY(-2px) rotate(-2.5deg); }
-  75%      { transform: translateY(-11px) rotate(3deg); }
-}
-
-/* TOMO ヒーロー用: ぴょこぴょこ跳ねる (休止区間ゼロ・常時アクション) */
-@keyframes tomo-blink-bounce {
-  0%, 100% { transform: scale(1.02, 0.98); }
-  25%      { transform: scale(0.90, 1.10); }
-  50%      { transform: scale(1.10, 0.90); }
-  75%      { transform: scale(0.96, 1.04); }
+  0%, 100% { transform: translateY(-2px) rotate(-0.5deg); }
+  50%      { transform: translateY(-8px) rotate(0.5deg); }
 }
 
 .animate-pom-bounce  { animation: pom-bounce 1.2s ease-in-out infinite; }
 .animate-paw-dance   { animation: paw-dance 0.8s ease-in-out infinite; }
 .animate-sticky-sway { animation: sticky-sway 4s ease-in-out infinite; }
 .animate-paper-flip  { animation: paper-flip 0.4s ease-out both; }
-.animate-tomo-idle   { animation: tomo-idle 2s ease-in-out infinite, tomo-blink-bounce 1.4s ease-in-out infinite; animation-delay: -0.5s, -0.3s; transform-origin: center bottom; }
+.animate-tomo-idle   { animation: tomo-idle 6s ease-in-out infinite; transform-origin: center bottom; }
 
 @media (prefers-reduced-motion: reduce) {
   .animate-pom-bounce, .animate-paw-dance, .animate-sticky-sway, .animate-paper-flip, .animate-tomo-idle {

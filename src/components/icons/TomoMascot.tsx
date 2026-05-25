@@ -11,6 +11,7 @@
  *
  * mood: CSS filter / transform で表情の代用 (default/thinking/happy/sad)
  */
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 type Variant = "face" | "hero" | "writing";
@@ -49,17 +50,14 @@ export function TomoMascot({
 }: Props) {
   const src = VARIANT_SOURCES[variant];
 
-  // priority は next/image 用なので素の <img> では無視
-  void priority;
-
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
+    <Image
       src={src.src}
       alt="TOMO (トモのAIアバター)"
       width={src.width}
       height={src.height}
       draggable={false}
+      priority={priority}
       className={cn(
         "select-none transition-all",
         MOOD_CLASSES[mood],
