@@ -17,14 +17,13 @@ export async function GET() {
 
   const status = vars.map((name) => {
     const val = process.env[name];
-    const isPublicUrl = name === "NEXT_PUBLIC_SUPABASE_URL";
     return {
       name,
       set: !!val,
       length: val?.length ?? 0,
       trimmed_length: val?.trim().length ?? 0,
       has_whitespace: val ? (/\s/.test(val) || val !== val.trim()) : false,
-      prefix: isPublicUrl ? val : (val ? val.trim().substring(0, 4) + "..." : "(empty)"),
+      prefix: val ? val.trim().substring(0, 4) + "..." : "(empty)",
     };
   });
 
