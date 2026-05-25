@@ -16,18 +16,18 @@ export type SuggestionItem = {
 
 const DEFAULT_SUGGESTIONS: SuggestionItem[] = [
   {
-    id: "report",
-    icon: "📓",
-    label: "レポート書くコツ",
-    prompt: "大学のレポートをAIで効率よく書くコツを教えて。",
+    id: "self-pr",
+    icon: "💪",
+    label: "自己PRをAIで磨く",
+    prompt: "就活の自己PRをAIで添削・ブラッシュアップするコツを教えて。",
     bg: "orange",
     tilt: -2.2,
   },
   {
-    id: "slide",
-    icon: "📊",
-    label: "スライド作るとき",
-    prompt: "プレゼン用のスライドをAIで作るとき、どう進めるのがいい？",
+    id: "industry",
+    icon: "🏢",
+    label: "業界研究 × AI活用",
+    prompt: "就活の業界研究をAIで効率よく進める方法を教えて。",
     bg: "yellow",
     tilt: 1.8,
   },
