@@ -21,7 +21,9 @@ export async function GET() {
       name,
       set: !!val,
       length: val?.length ?? 0,
-      prefix: val ? val.substring(0, 4) + "..." : "(empty)",
+      trimmed_length: val?.trim().length ?? 0,
+      has_whitespace: val ? (/\s/.test(val) || val !== val.trim()) : false,
+      prefix: val ? val.trim().substring(0, 4) + "..." : "(empty)",
     };
   });
 
@@ -31,9 +33,11 @@ export async function GET() {
   let supabaseTest = "not_tested";
   let rawFetchTest = "not_tested";
   try {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.SUPABASE_SECRET_KEY;
-    if (url && key) {
+    const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const rawKey = process.env.SUPABASE_SECRET_KEY;
+    if (rawUrl && rawKey) {
+      const url = rawUrl.trim();
+      const key = rawKey.trim();
       // Test 1: SDK
       const client = createClient(url, key, {
         auth: { autoRefreshToken: false, persistSession: false },
